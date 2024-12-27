@@ -763,3 +763,66 @@ html {
     color: #666;
     margin-bottom: 8px;
 }
+
+/* Email form container */
+.email-content {
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Modal styles */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+}
+
+.modal {
+    background: var(--sig-white);
+    padding: 20px;
+    border-radius: 8px;
+    position: relative;
+    min-width: 300px;
+    cursor: move;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 15px;
+}
+
+.modal-close {
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    color: #666;
+    padding: 5px;
+}
+
+.modal-close:hover {
+    color: #ff4444;
+}
+
+.modal-content {
+    text-align: center;
+}
+
+.modal-success {
+    color: #4CAF50;
+}
+
+.modal-error {
+    color: #ff4444;
+}

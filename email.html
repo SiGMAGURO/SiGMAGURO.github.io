@@ -4,39 +4,53 @@
         <div class="header-line"></div>
     </div>
     
-    <div class="feedback-container">
-        <div class="form-group">
-            <div class="input-wrapper">
-                <label for="subject">Subject</label>
-                <input type="text" id="subject" placeholder="Enter subject... *required">
+    <div class="email-content">
+        <form id="emailForm">
+            <div class="form-group">
+                <div class="input-wrapper">
+                    <label for="subject">Subject</label>
+                    <input type="text" id="subject" placeholder="Enter subject... *required">
+                </div>
+                <div class="error-message">Please enter a subject</div>
+                <div class="focus-line"></div>
             </div>
-            <div class="error-message">Please enter a subject</div>
-            <div class="focus-line"></div>
-        </div>
-        
-        <div class="form-group">
-            <div class="input-wrapper">
-                <label for="email">Email address</label>
-                <input type="email" id="email" placeholder="Enter email address... *required">
+            
+            <div class="form-group">
+                <div class="input-wrapper">
+                    <label for="email">Email address</label>
+                    <input type="email" id="email" placeholder="Enter email address... *required">
+                </div>
+                <div class="error-message">Please enter a valid email address</div>
+                <div class="focus-line"></div>
             </div>
-            <div class="error-message">Please enter a valid email address</div>
-            <div class="focus-line"></div>
-        </div>
-        
-        <div class="form-group">
-            <div class="input-wrapper">
-                <label for="content">Content</label>
-                <textarea id="content" placeholder="Enter content... *required"></textarea>
+            
+            <div class="form-group">
+                <div class="input-wrapper">
+                    <label for="content">Content</label>
+                    <textarea id="content" placeholder="Enter content... *required"></textarea>
+                </div>
+                <div class="error-message">Please enter your message</div>
+                <div class="focus-line"></div>
             </div>
-            <div class="error-message">Please enter your message</div>
-            <div class="focus-line"></div>
-        </div>
-        
-        <button id="sendButton">
-            <span class="button-text">Send</span>
-            <div class="button-icon">
-                <i class="fas fa-paper-plane"></i>
-            </div>
-        </button>
+            
+            <button id="sendButton">
+                <span class="button-text">Send</span>
+                <div class="button-icon">
+                    <i class="fas fa-paper-plane"></i>
+                </div>
+            </button>
+        </form>
     </div>
 </section>
+
+<!-- Add modal structure -->
+<div class="modal-overlay" id="modalOverlay">
+    <div class="modal" id="responseModal">
+        <div class="modal-header">
+            <button class="modal-close" id="modalClose">×</button>
+        </div>
+        <div class="modal-content" id="modalContent">
+            <!-- Content will be inserted dynamically -->
+        </div>
+    </div>
+</div>

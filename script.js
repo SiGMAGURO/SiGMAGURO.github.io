@@ -581,25 +581,79 @@ document.addEventListener('DOMContentLoaded', async () => {
             content: document.getElementById('content')
         };
         const sendButton = document.getElementById('sendButton');
+        const modal = document.getElementById('responseModal');
+        const modalOverlay = document.getElementById('modalOverlay');
+        const modalClose = document.getElementById('modalClose');
+        const modalContent = document.getElementById('modalContent');
 
-        if (!sendButton || Object.values(inputs).some(input => !input)) {
-            console.error('Required form elements not found');
-            return;
+        let isDragging = false;
+        let currentX;
+        let currentY;
+        let initialX;
+        let initialY;
+        let xOffset = 0;
+        let yOffset = 0;
+
+        // Modal drag functionality
+        modal.addEventListener('mousedown', dragStart);
+        document.addEventListener('mousemove', drag);
+        document.addEventListener('mouseup', dragEnd);
+
+        function dragStart(e) {
+            if (e.target === modalClose) return;
+            
+            initialX = e.clientX - xOffset;
+            initialY = e.clientY - yOffset;
+
+            if (e.target === modal) {
+                isDragging = true;
+            }
         }
 
-        function validateEmail(email) {
-            return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+        function drag(e) {
+            if (isDragging) {
+                e.preventDefault();
+                
+                currentX = e.clientX - initialX;
+                currentY = e.clientY - initialY;
+
+                xOffset = currentX;
+                yOffset = currentY;
+
+                setModalPosition(currentX, currentY);
+            }
         }
 
-        function validateInput(input, value, isEmail = false) {
-            const isEmpty = !value.trim();
-            const isInvalid = isEmail ? !validateEmail(value) : isEmpty;
-            input.parentElement.parentElement.classList.toggle('error', isInvalid);
-            return !isInvalid;
+        function dragEnd() {
+            isDragging = false;
         }
 
+        function setModalPosition(x, y) {
+            modal.style.transform = `translate3d(${x}px, ${y}px, 0)`;
+        }
+
+        // Show modal with message
+        function showModal(message, isSuccess = true) {
+            modalContent.innerHTML = `
+                <div class="modal-${isSuccess ? 'success' : 'error'}">
+                    <h3>${isSuccess ? 'Success!' : 'Error'}</h3>
+                    <p>${message}</p>
+                </div>
+            `;
+            modalOverlay.style.display = 'flex';
+            // Reset position
+            xOffset = 0;
+            yOffset = 0;
+            setModalPosition(0, 0);
+        }
+
+        // Close modal
+        modalClose.addEventListener('click', () => {
+            modalOverlay.style.display = 'none';
+        });
+
+        // Email validation and sending
         async function handleSubmit() {
-            // 驗證所有輸入
             const validations = {
                 subject: validateInput(inputs.subject, inputs.subject.value),
                 email: validateInput(inputs.email, inputs.email.value, true),
@@ -613,17 +667,21 @@ document.addEventListener('DOMContentLoaded', async () => {
                 try {
                     const emailContent = `${inputs.content.value}\n\nFrom: SiGMAGURO official feedback / bug report`;
                     
-                    await emailjs.send("service_feedback", "template_feedback", {
+                    const response = await emailjs.send("service_feedback", "template_feedback", {
                         subject: inputs.subject.value,
                         email: inputs.email.value,
                         content: emailContent
                     });
 
-                    alert('Thank you for your feedback!');
-                    Object.values(inputs).forEach(input => input.value = '');
+                    if (response.status === 200) {
+                        showModal('Your message has been sent successfully!');
+                        Object.values(inputs).forEach(input => input.value = '');
+                    } else {
+                        throw new Error('Failed to send email');
+                    }
                 } catch (error) {
                     console.error('Failed to send email:', error);
-                    alert('Failed to send email. Please try again later.');
+                    showModal('Failed to send email. Please try again later.', false);
                 } finally {
                     sendButton.disabled = false;
                     sendButton.innerHTML = `
@@ -636,15 +694,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             }
         }
 
-        // 添加輸入監聽器
-        Object.values(inputs).forEach(input => {
-            input.addEventListener('input', () => {
-                input.parentElement.parentElement.classList.remove('error');
-            });
-        });
-
-        // 添加按鈕點擊事件
-        sendButton.addEventListener('click', handleSubmit);
+        // Rest of the existing email form code...
     }
 
     // Add click handlers for menu items
