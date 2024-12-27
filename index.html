@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="X-Frame-Options" content="SAMEORIGIN">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' https: 'unsafe-inline' 'unsafe-eval';">
+    
+    <title>SiGMAGURO</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <script>
+        (function() {
+            emailjs.init("mcuIchpFvAtDXgEwa");
+        })();
+    </script>
+</head>
+<body>
+    <div id="fb-root"></div>
+    <header class="header">
+        <h1><a href="#" id="homeLink">SiGMAGURO</a></h1>
+        <div class="header-controls">
+            <button id="hide_ball" class="header-icon" title="Toggle Emojis">
+                <i class="fas fa-face-grin"></i>
+            </button>
+            <button id="hide_panel" class="header-icon" title="Toggle Panels">
+                <i class="fas fa-layer-group"></i>
+            </button>
+            <div class="lang-select">
+                <button id="langBtn" class="header-icon" title="Language">
+                    <i class="fas fa-globe"></i>
+                </button>
+                <div id="langMenu" class="lang-menu">
+                    <div class="lang-option" data-lang="en">English</div>
+                    <div class="lang-option" data-lang="ja">日本語</div>
+                    <div class="lang-option" data-lang="zh">繁體中文</div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div id="title" class="panel">
+            <img id="titleImg" src="./Assets/Textures/SiGMAGURO_Title.png" alt="SIGMAGURO Title">
+            <img id="logoImg" src="./Assets/Textures/SiGMAGURO_Logo.png" alt="SIGMAGURO Logo">
+        </div>
+
+        <div id="menu" class="panel">
+            <div class="social-links">
+                <a href="#" id="home_link" class="social-icon" title="Home">
+                    <i class="fas fa-home"></i>
+                </a>
+                <a href="#" id="twitter_link" class="social-icon" title="Twitter">
+                    <i class="fab fa-twitter"></i>
+                </a>
+                <a href="#" id="ci-en_link" class="social-icon" title="Ci-en">
+                    <i class="fa-solid fa-heart"></i>
+                </a>
+                <a href="#" id="facebook_link" class="social-icon" title="Facebook">
+                    <i class="fab fa-facebook"></i>
+                </a>
+                <a href="#" id="youtube_link" class="social-icon" title="YouTube">
+                    <i class="fab fa-youtube"></i>
+                </a>
+                <a href="#" id="email_link" class="social-icon" title="Email">
+                    <i class="fas fa-envelope"></i>
+                </a>
+            </div>
+        </div>
+
+        <div id="content" class="panel">
+            
+        </div>
+    </main>
+    <script src="script.js"></script>
+</body>
+</html> 
