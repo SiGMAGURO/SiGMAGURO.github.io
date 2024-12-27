@@ -6,29 +6,26 @@
     
     <div class="container">
         <div class="form-container">
-            <h2>聯絡表單</h2>
             <form id="contactForm">
                 <div class="form-group">
-                    <label for="name">姓名：</label>
-                    <input type="text" id="name" name="name" class="form-control" required>
-                </div>
-                
-                <div class="form-group">
-                    <label for="email">電子郵件：</label>
-                    <input type="email" id="email" name="email" class="form-control" required>
-                </div>
-                
-                <div class="form-group">
-                    <label for="subject">主旨：</label>
+                    <label for="subject">Subject:</label>
                     <input type="text" id="subject" name="subject" class="form-control" required>
                 </div>
                 
                 <div class="form-group">
-                    <label for="message">訊息內容：</label>
-                    <textarea id="message" name="message" class="form-control" rows="5" required></textarea>
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" name="email" class="form-control" required>
                 </div>
                 
-                <button type="submit" class="submit-btn">送出</button>
+                <div class="form-group">
+                    <label for="content">Content:</label>
+                    <textarea id="content" name="content" class="form-control" rows="5" required></textarea>
+                </div>
+                
+                <button type="submit" class="submit-btn">
+                    <span>Send</span>
+                    <i class="fas fa-paper-plane"></i>
+                </button>
             </form>
         </div>
     </div>
@@ -56,22 +53,45 @@
 .submit-btn {
     width: 100%;
     padding: 10px;
-    background-color: #4CAF50;
-    color: white;
+    background-color: var(--sig_blue_dark);
+    color: var(--sig_white);
     border: none;
     border-radius: 4px;
     cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
 }
 
 .submit-btn:hover {
-    background-color: #45a049;
+    background-color: var(--sig_blue_mid);
+}
+
+.submit-btn i {
+    font-size: 16px;
 }
 </style>
 
 <script>
 document.getElementById('contactForm').addEventListener('submit', function(e) {
     e.preventDefault();
-    // 在這裡處理表單提交邏輯
-    console.log('表單已提交');
+    
+    const formData = {
+        subject: document.getElementById('subject').value,
+        email: document.getElementById('email').value,
+        content: document.getElementById('content').value
+    };
+
+    emailjs.init("mcuIchpFvAtDXgEwa");
+    
+    emailjs.send("service_feedback", "template_feedback", formData)
+        .then(function() {
+            alert("Feedback sent!");
+            document.getElementById('contactForm').reset();
+        }, function(error) {
+            console.error("發送失敗:", error);
+            alert("Failed to send feedback. Please try again.");
+        });
 });
 </script>
