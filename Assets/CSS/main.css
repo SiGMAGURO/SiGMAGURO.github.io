@@ -45,7 +45,7 @@ body::before {
     left: 0;
     width: 100%;
     height: 100%;
-    background-image: url('./Assets/Textures/SiGMAGURO_BG.png');
+    background-image: url('../Textures/SiGMAGURO_BG.png');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -55,28 +55,10 @@ body::before {
     z-index: -1;
 }
 
-/* Add overlay to improve content readability */
-body::after {
-    content: '';
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(64, 129, 191, 0.3);
-    opacity: 0;
-    transition: opacity 2s ease;
-    z-index: -1;
-}
-
 /* Blur effect class */
 .blur-background::before {
     -webkit-filter: blur(8px);
     filter: blur(8px);
-}
-
-.blur-background::after {
-    opacity: 1 !important;
 }
 
 .header {
@@ -100,9 +82,14 @@ body::after {
 }
 
 .header h1 a {
-    color: inherit;
+    color: var(--sig-blue-dark);
     text-decoration: none;
     cursor: pointer;
+    transition: color var(--transition-speed) var(--transition-timing);
+}
+
+.header h1 a:hover {
+    color: var(--sig-blue-light);
 }
 
 main {
@@ -170,7 +157,7 @@ main {
     max-width: 256px;
     height: auto;
     display: block;
-    transition: all 0.5s ease;
+    transition: all 0.2s ease;
     overflow: hidden;
 }
 
@@ -356,22 +343,6 @@ main {
     width: auto;
 }
 
-.intro-section {
-    display: flex;
-    flex-direction: column;
-    padding: 32px;
-}
-
-.intro-section section {
-    margin-bottom: 40px;
-}
-
-.intro-section h2 {
-    color: var(--sig-blue-dark);
-    margin-bottom: 20px;
-    font-size: 24px;
-}
-
 .game-list, .member-list {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -405,17 +376,6 @@ main {
     height: 100%;
 }
 
-/* Add smooth transition for content switching */
-#intro-content,
-#twitter-content {
-    transition: opacity 0.3s ease;
-}
-
-#intro-content.hidden,
-#twitter-content.hidden {
-    opacity: 0;
-}
-
 /* Ci-en embed container */
 .cien-embed {
     width: 100%;
@@ -439,10 +399,8 @@ main {
 #facebook-content,
 #youtube-content {
     opacity: 0;
-    transition: opacity 0.3s ease;
+    transition: opacity 0.2s ease;
 }
-
-/* Remove the .hidden classes as they're no longer needed */
 
 /* Facebook embed container */
 .facebook-embed {

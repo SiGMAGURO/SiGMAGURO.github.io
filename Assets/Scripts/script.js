@@ -76,27 +76,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Initialize content containers
     const contentDiv = document.getElementById('content');
     contentDiv.innerHTML = `
-        <div id="intro-content" class="intro-section">
-            <section class="game-dev">
-                <h2>Current Projects</h2>
-                <div class="game-list">
-                    <!-- Game projects will be dynamically added here -->
-                </div>
-            </section>
-            
-            <section class="team-intro">
-                <h2>About Us</h2>
-                <div class="team-description">
-                    <!-- Team introduction content -->
-                </div>
-            </section>
-            
-            <section class="team-members">
-                <h2>Our Team</h2>
-                <div class="member-list">
-                    <!-- Team member list will be dynamically added here -->
-                </div>
-            </section>
+        <div id="intro-content">
+            <iframe id="intro-iframe" 
+                src="./Assets/HTML/home.html" 
+                style="width: 100%; border: none;"
+                onload="this.style.height = this.contentWindow.document.documentElement.scrollHeight + 'px'">
+            </iframe>
         </div>
         <div id="twitter-content" class="twitter-embed" style="display: none;">
             <a class="twitter-timeline" 
@@ -147,6 +132,23 @@ document.addEventListener('DOMContentLoaded', async () => {
         </div>
     `;
 
+    // Add iframe height adjustment
+    const introIframe = document.getElementById('intro-iframe');
+    introIframe.addEventListener('load', () => {
+        try {
+            const height = introIframe.contentWindow.document.documentElement.scrollHeight;
+            introIframe.style.height = height + 'px';
+            
+            const resizeObserver = new ResizeObserver(entries => {
+                introIframe.style.height = introIframe.contentWindow.document.documentElement.scrollHeight + 'px';
+            });
+            
+            resizeObserver.observe(introIframe.contentWindow.document.body);
+        } catch (error) {
+            console.warn('無法取得iframe高度:', error);
+        }
+    });
+
     // Load Twitter widget
     await loadTwitterWidget();
 
@@ -185,7 +187,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
     }
 
-    // 修改Twitter腳本加載
+    // modify twitter script load
     async function loadTwitterWidget() {
         try {
             await loadExternalScript('https://platform.twitter.com/widgets.js', {
@@ -196,7 +198,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 }
             });
             
-            // 等待Twitter時間軸加載完成
+            // wait twitter timeline load complete
             if (window.twttr) {
                 await window.twttr.ready();
             }
@@ -210,87 +212,28 @@ document.addEventListener('DOMContentLoaded', async () => {
         const currentContent = Array.from(allContents).find(el => el.style.display === 'block');
         
         try {
-            // 淡出當前內容
+            // fade out current content
             if (currentContent) {
                 currentContent.style.opacity = '0';
                 await new Promise(resolve => setTimeout(resolve, 300));
                 currentContent.style.display = 'none';
             }
 
-            // 準備新內容
+            // prepare new content
             let newElement = document.getElementById(contentId);
             if (!newElement) {
                 newElement = document.createElement('div');
                 newElement.id = contentId;
                 newElement.className = contentId;
                 document.getElementById('content').appendChild(newElement);
-
-                // 載入對應內容
-                try {
-                    switch(contentId) {
-                        case 'intro-content':
-                            const introResponse = await fetch('./home.html');
-                            if (!introResponse.ok) {
-                                throw new Error(`HTTP error! status: ${introResponse.status}`);
-                            }
-                            const introHtml = await introResponse.text();
-                            newElement.innerHTML = introHtml;
-                            break;
-                        case 'email-content':
-                            const emailResponse = await fetch('./email.html');
-                            if (!emailResponse.ok) {
-                                throw new Error(`HTTP error! status: ${emailResponse.status}`);
-                            }
-                            const emailHtml = await emailResponse.text();
-                            newElement.innerHTML = emailHtml;
-                            requestAnimationFrame(() => {
-                                console.log('Initializing email form...');
-                                initEmailForm();
-                            });
-                            break;
-                        default:
-                            newElement.innerHTML = getContentHTML(contentId);
-                    }
-                } catch (error) {
-                    console.error(`Error loading ${contentId}:`, error);
-                    newElement.innerHTML = `
-                        <div class="error-container">
-                            <h2>載入失敗</h2>
-                            <p>很抱歉，內容載入失敗。請確保您使用的是支援的瀏覽器並通過HTTP/HTTPS訪問。</p>
-                            <p>錯誤詳情：${error.message}</p>
-                        </div>
-                    `;
-                }
             }
 
-            // 顯示新內容
+            // show new content
             newElement.style.display = 'block';
             newElement.offsetHeight; // Force reflow
             newElement.style.opacity = '1';
         } catch (error) {
             console.error('Error in content switching:', error);
-        }
-    }
-
-    // Helper function to get content HTML
-    function getContentHTML(contentId) {
-        switch(contentId) {
-            case 'twitter-content':
-                return `<div class="twitter-embed">
-                    <a class="twitter-timeline" 
-                       href="https://twitter.com/SiGMAGURO"
-                       data-chrome="noheader nofooter noborders transparent"
-                       data-tweet-limit="10"
-                       data-conversation="none"
-                       data-link-color="#5fc3e5"
-                       data-media-preview="true"
-                       data-theme="light"
-                       data-dnt="true">
-                    </a>
-                </div>`;
-            // ... other cases
-            default:
-                return '';
         }
     }
 
@@ -536,37 +479,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         ballsActive = !ballsActive;
     });
 
-    // Toggle panels with better error handling
-    function togglePanels(show) {
-        const panels = document.querySelectorAll('.panel');
-        const transition = 'opacity 0.3s ease, transform 0.3s ease';
-        
-        panels.forEach(panel => {
-            panel.style.transition = transition;
-            
-            if (!show) {
-                // 隱藏面板
-                panel.style.opacity = '0';
-                panel.style.transform = 'translateY(-10px)';
-                setTimeout(() => {
-                    panel.style.display = 'none';
-                }, 300);
-            } else {
-                // 顯示面板
-                const display = ['menu', 'content'].includes(panel.id) ? 'block' : 'flex';
-                panel.style.display = display;
-                panel.style.opacity = '0';
-                panel.style.transform = 'translateY(-10px)';
-                
-                // Force reflow and show
-                requestAnimationFrame(() => {
-                    panel.style.opacity = '1';
-                    panel.style.transform = 'translateY(0)';
-                });
-            }
-        });
-    }
-
     // Handle hide_panel button click
     document.getElementById('hide_panel').addEventListener('click', function() {
         const panels = document.querySelectorAll('.panel');
@@ -575,12 +487,17 @@ document.addEventListener('DOMContentLoaded', async () => {
         panels.forEach(panel => {
             if (isHidden) {
                 // Show panels with fade in animation
+                panel.style.visibility = 'visible'; // set visible
+                panel.style.pointerEvents = 'none'; // disable interaction
+                // force reflow to ensure animation works
+                panel.offsetHeight;
+                
                 panel.style.transition = 'all 0.2s ease-in';
                 panel.style.opacity = '1';
                 panel.style.transform = 'translateY(0)';
-                // Enable interaction after animation
+                
+                // enable interaction after animation
                 setTimeout(() => {
-                    panel.style.visibility = 'visible';
                     panel.style.pointerEvents = 'auto';
                 }, 200);
             } else {
@@ -588,9 +505,9 @@ document.addEventListener('DOMContentLoaded', async () => {
                 panel.style.transition = 'all 0.2s ease-out';
                 panel.style.opacity = '0';
                 panel.style.transform = 'translateY(-20px)';
-                // Disable interaction immediately
                 panel.style.pointerEvents = 'none';
-                // Hide element after animation
+                
+                // hide element after animation
                 setTimeout(() => {
                     panel.style.visibility = 'hidden';
                 }, 200);
@@ -626,30 +543,4 @@ document.addEventListener('DOMContentLoaded', async () => {
         e.preventDefault();
         showContent('youtube-content');
     });
-
-    // Load social media scripts with error handling
-    async function loadSocialMediaScripts() {
-        try {
-            // Twitter
-            await loadExternalScript('https://platform.twitter.com/widgets.js', {
-                async: true,
-                charset: 'utf-8',
-                onerror: (error) => {
-                    console.warn('Twitter widget failed to load:', error);
-                }
-            });
-
-            // Facebook
-            await loadExternalScript('https://connect.facebook.net/zh_TW/sdk.js', {
-                async: true,
-                defer: true,
-                crossorigin: 'anonymous',
-                onerror: (error) => {
-                    console.warn('Facebook SDK failed to load:', error);
-                }
-            });
-        } catch (error) {
-            console.warn('Social media scripts failed to load:', error);
-        }
-    }
 }); 
