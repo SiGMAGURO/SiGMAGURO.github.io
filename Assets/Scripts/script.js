@@ -80,7 +80,8 @@ document.addEventListener('DOMContentLoaded', async () => {
             <iframe id="intro-iframe" 
                 src="./Assets/HTML/home.html" 
                 style="width: 100%; border: none;"
-                onload="this.style.height = this.contentWindow.document.documentElement.scrollHeight + 'px'">
+                onload="this.style.height = this.contentWindow.document.documentElement.scrollHeight + 'px'"
+                allow="same-origin">
             </iframe>
         </div>
         <div id="twitter-content" class="twitter-embed" style="display: none;">
@@ -131,23 +132,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             </div>
         </div>
     `;
-
-    // Add iframe height adjustment
-    const introIframe = document.getElementById('intro-iframe');
-    introIframe.addEventListener('load', () => {
-        try {
-            const height = introIframe.contentWindow.document.documentElement.scrollHeight;
-            introIframe.style.height = height + 'px';
-            
-            const resizeObserver = new ResizeObserver(entries => {
-                introIframe.style.height = introIframe.contentWindow.document.documentElement.scrollHeight + 'px';
-            });
-            
-            resizeObserver.observe(introIframe.contentWindow.document.body);
-        } catch (error) {
-            console.warn('無法取得iframe高度:', error);
-        }
-    });
 
     // Load Twitter widget
     await loadTwitterWidget();
