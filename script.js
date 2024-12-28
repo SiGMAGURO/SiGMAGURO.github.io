@@ -62,8 +62,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         'twitter_link': showContent.bind(null, 'twitter-content'),
         'ci-en_link': showContent.bind(null, 'cien-content'),
         'facebook_link': showContent.bind(null, 'facebook-content'),
-        'youtube_link': showContent.bind(null, 'youtube-content'),
-        'email_link': showContent.bind(null, 'email-content')
+        'youtube_link': showContent.bind(null, 'youtube-content')
     };
 
     // Add click handlers for all content links
@@ -568,134 +567,39 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
     }
 
-    // 更新事件監聽器
-    document.getElementById('hide_panel').addEventListener('click', () => {
-        panelsVisible = !panelsVisible;
-        togglePanels(panelsVisible);
-    });
-
-    function initEmailForm() {
-        const inputs = {
-            subject: document.getElementById('subject'),
-            email: document.getElementById('email'),
-            content: document.getElementById('content')
-        };
-        const sendButton = document.getElementById('sendButton');
-        const modal = document.getElementById('responseModal');
-        const modalOverlay = document.getElementById('modalOverlay');
-        const modalClose = document.getElementById('modalClose');
-        const modalContent = document.getElementById('modalContent');
-
-        let isDragging = false;
-        let currentX;
-        let currentY;
-        let initialX;
-        let initialY;
-        let xOffset = 0;
-        let yOffset = 0;
-
-        // Modal drag functionality
-        modal.addEventListener('mousedown', dragStart);
-        document.addEventListener('mousemove', drag);
-        document.addEventListener('mouseup', dragEnd);
-
-        function dragStart(e) {
-            if (e.target === modalClose) return;
-            
-            initialX = e.clientX - xOffset;
-            initialY = e.clientY - yOffset;
-
-            if (e.target === modal) {
-                isDragging = true;
+    // Handle hide_panel button click
+    document.getElementById('hide_panel').addEventListener('click', function() {
+        const panels = document.querySelectorAll('.panel');
+        const isHidden = this.getAttribute('data-hidden') === 'true';
+        
+        panels.forEach(panel => {
+            if (isHidden) {
+                // Show panels with fade in animation
+                panel.style.transition = 'all 0.2s ease-in';
+                panel.style.opacity = '1';
+                panel.style.transform = 'translateY(0)';
+                // Enable interaction after animation
+                setTimeout(() => {
+                    panel.style.visibility = 'visible';
+                    panel.style.pointerEvents = 'auto';
+                }, 200);
+            } else {
+                // Hide panels with fade out animation
+                panel.style.transition = 'all 0.2s ease-out';
+                panel.style.opacity = '0';
+                panel.style.transform = 'translateY(-20px)';
+                // Disable interaction immediately
+                panel.style.pointerEvents = 'none';
+                // Hide element after animation
+                setTimeout(() => {
+                    panel.style.visibility = 'hidden';
+                }, 200);
             }
-        }
-
-        function drag(e) {
-            if (isDragging) {
-                e.preventDefault();
-                
-                currentX = e.clientX - initialX;
-                currentY = e.clientY - initialY;
-
-                xOffset = currentX;
-                yOffset = currentY;
-
-                setModalPosition(currentX, currentY);
-            }
-        }
-
-        function dragEnd() {
-            isDragging = false;
-        }
-
-        function setModalPosition(x, y) {
-            modal.style.transform = `translate3d(${x}px, ${y}px, 0)`;
-        }
-
-        // Show modal with message
-        function showModal(message, isSuccess = true) {
-            modalContent.innerHTML = `
-                <div class="modal-${isSuccess ? 'success' : 'error'}">
-                    <h3>${isSuccess ? 'Success!' : 'Error'}</h3>
-                    <p>${message}</p>
-                </div>
-            `;
-            modalOverlay.style.display = 'flex';
-            // Reset position
-            xOffset = 0;
-            yOffset = 0;
-            setModalPosition(0, 0);
-        }
-
-        // Close modal
-        modalClose.addEventListener('click', () => {
-            modalOverlay.style.display = 'none';
         });
-
-        // Email validation and sending
-        async function handleSubmit() {
-            const validations = {
-                subject: validateInput(inputs.subject, inputs.subject.value),
-                email: validateInput(inputs.email, inputs.email.value, true),
-                content: validateInput(inputs.content, inputs.content.value)
-            };
-
-            if (Object.values(validations).every(Boolean)) {
-                sendButton.disabled = true;
-                sendButton.innerHTML = '<span class="button-text">Sending...</span>';
-
-                try {
-                    const emailContent = `${inputs.content.value}\n\nFrom: SiGMAGURO official feedback / bug report`;
-                    
-                    const response = await emailjs.send("service_feedback", "template_feedback", {
-                        subject: inputs.subject.value,
-                        email: inputs.email.value,
-                        content: emailContent
-                    });
-
-                    if (response.status === 200) {
-                        showModal('Your message has been sent successfully!');
-                        Object.values(inputs).forEach(input => input.value = '');
-                    } else {
-                        throw new Error('Failed to send email');
-                    }
-                } catch (error) {
-                    console.error('Failed to send email:', error);
-                    showModal('Failed to send email. Please try again later.', false);
-                } finally {
-                    sendButton.disabled = false;
-                    sendButton.innerHTML = `
-                        <span class="button-text">Send</span>
-                        <div class="button-icon">
-                            <i class="fas fa-paper-plane"></i>
-                        </div>
-                    `;
-                }
-            }
-        }
-
-        // Rest of the existing email form code...
-    }
+        
+        // Toggle hidden state
+        this.setAttribute('data-hidden', !isHidden);
+    });
 
     // Add click handlers for menu items
     document.getElementById('home_link').addEventListener('click', (e) => {
@@ -721,12 +625,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     document.getElementById('youtube_link').addEventListener('click', (e) => {
         e.preventDefault();
         showContent('youtube-content');
-    });
-
-    // Add email link handler
-    document.getElementById('email_link').addEventListener('click', (e) => {
-        e.preventDefault();
-        showContent('email-content');
     });
 
     // Load social media scripts with error handling

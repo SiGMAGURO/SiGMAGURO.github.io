@@ -5,16 +5,19 @@
     font-style: normal;
 }
 
+/* Reset default styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
 /* Basic settings */
 html {
     text-size-adjust: 100%;
-}
-
-body {
-    -webkit-text-size-adjust: none;
-    -moz-text-size-adjust: none;
-    -ms-text-size-adjust: none;
-    text-size-adjust: none;
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
 }
 
 :root {
@@ -22,6 +25,8 @@ body {
     --sig-blue-light: #5fc3e5;
     --sig-blue-mid: #4081bf;
     --sig-blue-dark: #185692;
+    --transition-speed: 0.2s;
+    --transition-timing: ease-in-out;
 }
 
 body {
@@ -116,8 +121,11 @@ main {
     border-radius: 4px;
     margin-bottom: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-    transition: background-color 0.5s ease;
     width: calc(100% - 16px);
+    transition: all var(--transition-speed) var(--transition-timing),
+                background-color 0.5s ease;
+    visibility: visible;
+    pointer-events: auto;
 }
 
 .panel:hover {
@@ -286,6 +294,7 @@ main {
     align-items: center;
     gap: 16px;
     padding: 4px 0;
+    flex-wrap: wrap;
 }
 
 .social-icon {
@@ -580,248 +589,34 @@ main {
 
 /* Remove old .lang-btn styles and use .header-icon instead */
 
-/* Feedback section styles */
-.feedback-section {
-    padding: 32px;
-    max-width: 800px;
-    margin: 0 auto;
-}
-
-.feedback-header {
-    margin-bottom: 48px;
-    text-align: center;
-}
-
-.feedback-header h1 {
-    color: var(--sig-blue-dark);
-    font-size: 32px;
-    margin-bottom: 16px;
-}
-
-.header-line {
-    height: 4px;
-    background: linear-gradient(to right, var(--sig-blue-light), var(--sig-blue-dark));
-    border-radius: 2px;
-    width: 100px;
-    margin: 0 auto;
-}
-
-.feedback-container {
-    background: rgba(255, 255, 255, 0.1);
-    -webkit-backdrop-filter: blur(10px);
-    backdrop-filter: blur(10px);
-    padding: 32px;
-    border-radius: 16px;
-    box-shadow: 0 8px 32px rgba(24, 86, 146, 0.1);
-}
-
-.form-group {
-    margin-bottom: 32px;
-    position: relative;
-}
-
-.input-wrapper {
-    position: relative;
-    margin-bottom: 4px;
-}
-
-.form-group label {
-    display: block;
-    color: var(--sig-blue-mid);
-    margin-bottom: 8px;
-    font-size: 16px;
-    transition: color 0.3s ease;
-}
-
-.form-group input,
-.form-group textarea {
-    width: 100%;
-    padding: 12px;
-    border: 2px solid var(--sig-white);
-    border-radius: 8px;
-    font-family: inherit;
-    font-size: 16px;
-    background-color: var(--sig-white);
-    color: var(--sig-blue-dark);
-    transition: all 0.3s ease;
-}
-
-.form-group input:focus,
-.form-group textarea:focus {
-    outline: none;
-    border-color: var(--sig-blue-light);
-    box-shadow: 0 0 0 3px rgba(95, 195, 229, 0.2);
-}
-
-.form-group input:focus + label,
-.form-group textarea:focus + label {
-    color: var(--sig-blue-light);
-}
-
-.form-group textarea {
-    height: 200px;
-    resize: vertical;
-}
-
-.focus-line {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    height: 2px;
-    width: 0;
-    background: var(--sig-blue-light);
-    transition: width 0.3s ease;
-}
-
-.form-group input:focus ~ .focus-line,
-.form-group textarea:focus ~ .focus-line {
-    width: 100%;
-}
-
-#sendButton {
-    width: 100%;
-    padding: 16px;
-    border: none;
-    border-radius: 8px;
-    background: linear-gradient(135deg, var(--sig-blue-mid), var(--sig-blue-dark));
-    color: var(--sig-white);
-    font-size: 18px;
+/* Hide panel button styles */
+#hide_panel {
     cursor: pointer;
-    transition: all 0.3s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 12px;
 }
 
-#sendButton:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(24, 86, 146, 0.2);
+/* Improve performance with hardware acceleration */
+.panel, .social-icon, .lang-menu, .emoji-ball {
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    perspective: 1000px;
 }
 
-#sendButton:active {
-    transform: translateY(0);
-}
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .social-icon {
+        height: 40px;
+        width: 40px;
+    }
 
-#sendButton:disabled {
-    background: var(--sig-blue-light);
-    cursor: not-allowed;
-    transform: none;
-}
+    .social-icon i {
+        font-size: 24px;
+    }
 
-.button-icon {
-    font-size: 20px;
-    transition: transform 0.3s ease;
-}
+    #titleImg {
+        width: 90%;
+    }
 
-#sendButton:hover .button-icon {
-    transform: translateX(4px);
-}
-
-.error-message {
-    color: #ff4444;
-    font-size: 14px;
-    margin-top: 4px;
-    opacity: 0;
-    transform: translateY(-10px);
-    transition: all 0.3s ease;
-}
-
-.form-group.error .error-message {
-    opacity: 1;
-    transform: translateY(0);
-}
-
-.form-group.error input,
-.form-group.error textarea {
-    border-color: #ff4444;
-    box-shadow: 0 0 0 3px rgba(255, 68, 68, 0.1);
-}
-
-/* Add text size adjust */
-html {
-    -webkit-text-size-adjust: 100%;
-    -moz-text-size-adjust: 100%;
-    -ms-text-size-adjust: 100%;
-    text-size-adjust: 100%;
-}
-
-.error-container {
-    padding: 20px;
-    background: rgba(255, 68, 68, 0.1);
-    border-radius: 8px;
-    border: 1px solid rgba(255, 68, 68, 0.3);
-    margin: 20px;
-}
-
-.error-container h2 {
-    color: #ff4444;
-    margin-bottom: 10px;
-}
-
-.error-container p {
-    color: #666;
-    margin-bottom: 8px;
-}
-
-/* Email form container */
-.email-content {
-    width: 100%;
-    max-width: 800px;
-    margin: 0 auto;
-}
-
-/* Modal styles */
-.modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    display: none;
-    justify-content: center;
-    align-items: center;
-    z-index: 2000;
-}
-
-.modal {
-    background: var(--sig-white);
-    padding: 20px;
-    border-radius: 8px;
-    position: relative;
-    min-width: 300px;
-    cursor: move;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-}
-
-.modal-header {
-    display: flex;
-    justify-content: flex-end;
-    margin-bottom: 15px;
-}
-
-.modal-close {
-    background: none;
-    border: none;
-    font-size: 20px;
-    cursor: pointer;
-    color: #666;
-    padding: 5px;
-}
-
-.modal-close:hover {
-    color: #ff4444;
-}
-
-.modal-content {
-    text-align: center;
-}
-
-.modal-success {
-    color: #4CAF50;
-}
-
-.modal-error {
-    color: #ff4444;
+    #logoImg {
+        width: 70%;
+    }
 }
