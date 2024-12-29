@@ -191,9 +191,9 @@ main {
 
 #content {
     display: block;
-    min-height: 256px;
     margin-bottom: 8px;
     max-width: 992px;
+    min-height: 25vw;
     padding: 32px;
 }
 
