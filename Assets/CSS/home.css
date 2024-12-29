@@ -122,9 +122,10 @@ body {
 
 .close-modal {
     position: absolute;
-    right: 20px;
-    top: 20px;
+    right: 2%;
+    top: 2%;
     color: white;
     font-size: 30px;
     cursor: pointer;
+    z-index: 1001;
 }
