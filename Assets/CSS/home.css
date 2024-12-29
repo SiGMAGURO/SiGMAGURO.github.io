@@ -19,15 +19,24 @@ body {
     overflow: hidden;
 }
 
-.intro-section {
+.intro-section{
     display: flex;
     flex-direction: column;
 }
 
 .intro-section h2 {
+    color: var(--sig-blue-mid);
+    margin-top: 48pt;
+    margin-bottom: 24pt;
+    font-size: 24pt;
+    text-align: center;
+}
+
+.intro-section p {
     color: var(--sig-blue-dark);
-    margin-bottom: 20px;
-    font-size: 24px;
+    margin-left: 2em;
+    margin-right: 2em;
+    font-size: 16pt;
 }
 
 .display-section {
@@ -128,4 +137,179 @@ body {
     font-size: 32px;
     cursor: pointer;
     z-index: 1001;
+}
+
+.game-list {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.game-item {
+    width: 100%;
+    background-color: rgba(236, 233, 233, 0.5);
+    border-radius: 8px;
+    margin-bottom: 8px;
+    padding: 16px;
+    box-sizing: border-box;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    overflow: hidden;
+}
+
+.game-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.game-name {
+    color: var(--sig-blue-dark);
+    font-size: 2vw;
+    font-weight: bold;
+}
+
+.game-date {
+    color: var(--sig-blue-mid);
+    font-size: 1.5vw;
+}
+
+.game-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    max-height: 0;
+    opacity: 0;
+    transition: all 0.2s ease;
+}
+
+.game-item:hover .game-content {
+    max-height: 500px;
+    opacity: 1;
+}
+
+.game-thumbnail {
+    width: 128px;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    border-radius: 4px;
+}
+
+.game-thumbnail img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.2s ease;
+}
+
+.game-item:hover .game-thumbnail img {
+    transform: scale(1);
+}
+
+.game-links {
+    text-align: right;
+    font-size: 3vw;
+}
+
+.game-links a {
+    color: var(--sig-blue-mid);
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.game-links a:hover {
+    color: var(--sig-blue-light);
+}
+
+/* Modify separator style */
+.game-links a:not(:last-child)::after {
+    content: '|';
+    color: var(--sig-blue-dark);
+    margin: 1vw;
+}
+
+.coming-soon {
+    color: var(--sig-blue-mid);
+    font-style: italic;
+}
+
+.copyright p{
+    color: var(--sig-blue-mid);
+    font-size: 12pt;
+    text-align: center;
+    a {
+        color: var(--sig-blue-mid);
+        text-decoration: none;
+    }
+    a:hover {
+        color: var(--sig-blue-light);
+    }
+}
+
+.member-list {
+    display: flex;
+    justify-content: center;
+    gap: 32px;
+    padding: 20px 0;
+}
+
+.member a {
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+.member-image {
+    position: relative;
+    width: 128px;
+    height: 128px;
+    border-radius: 50%;
+    border: 8px solid rgba(236, 233, 233, 0.5);
+    overflow: hidden;
+    transition: box-shadow 0.2s ease;
+}
+
+.member-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.member-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.25);
+    transition: opacity 1s ease;
+}
+
+.member-icon {
+    position: absolute;
+    top: 75%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: var(--sig-white);
+    font-size: 48px;
+    transition: opacity 0.2s ease;
+    z-index: 2;
+}
+
+.member-name {
+    color: var(--sig-blue-dark);
+    font-size: 16pt;
+    text-align: center;
+}
+
+/* Hover effects */
+.member-image:hover {
+    box-shadow: 0 0 15px var(--sig-blue-mid);
+}
+
+.member-image:hover .member-overlay,
+.member-image:hover .member-icon {
+    opacity: 0;
 }

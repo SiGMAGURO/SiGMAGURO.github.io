@@ -73,14 +73,55 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
     });
 
-    // Initialize content containers
+    // Add iframe resize handler
+    function setupIframeResize() {
+        const iframe = document.getElementById('intro-iframe');
+        if (!iframe) return;
+
+        // Create resize observer for iframe content
+        const resizeObserver = new ResizeObserver((entries) => {
+            for (const entry of entries) {
+                const height = entry.target.scrollHeight;
+                iframe.style.height = `${height}px`;
+            }
+        });
+
+        // Observe iframe content when loaded
+        iframe.addEventListener('load', () => {
+            const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+            resizeObserver.observe(iframeDoc.body);
+
+            // Add mouseleave handler to update height
+            iframeDoc.body.addEventListener('mouseleave', () => {
+                setTimeout(() => {
+                    const height = iframeDoc.documentElement.scrollHeight;
+                    iframe.style.height = `${height}px`;
+                }, 300); // Wait for animations to complete
+            });
+
+            // Add transition end handler
+            iframeDoc.body.addEventListener('transitionend', () => {
+                const height = iframeDoc.documentElement.scrollHeight;
+                iframe.style.height = `${height}px`;
+            });
+        });
+
+        // Handle resize messages from iframe
+        window.addEventListener('message', function(e) {
+            if (e.data && e.data.type === 'resize') {
+                iframe.style.height = `${e.data.height}px`;
+            }
+        });
+    }
+
+    // Initialize content
     const contentDiv = document.getElementById('content');
     contentDiv.innerHTML = `
-        <div id="intro-content" class="intro-embed" style="display: none;">
+        <div id="intro-content">
             <iframe id="intro-iframe" 
-                src="./Assets/HTML/home.html"
-                onload="this.style.height = this.contentWindow.document.documentElement.scrollHeight + 'px'"
-                allow="same-origin">
+                src="./Assets/HTML/home.html" 
+                style="width: 100%; border: none; overflow: hidden;"
+                scrolling="no">
             </iframe>
         </div>
         <div id="twitter-content" class="twitter-embed" style="display: none;">
@@ -131,6 +172,9 @@ document.addEventListener('DOMContentLoaded', async () => {
             </div>
         </div>
     `;
+
+    // Call setup after content initialization
+    setupIframeResize();
 
     // Load Twitter widget
     await loadTwitterWidget();
@@ -525,5 +569,15 @@ document.addEventListener('DOMContentLoaded', async () => {
     document.getElementById('youtube_link').addEventListener('click', (e) => {
         e.preventDefault();
         showContent('youtube-content');
+    });
+
+    // Add this message listener after DOMContentLoaded
+    window.addEventListener('message', function(e) {
+        if (e.data && e.data.type === 'resize') {
+            const iframe = document.getElementById('intro-iframe');
+            if (iframe) {
+                iframe.style.height = `${e.data.height}px`;
+            }
+        }
     });
 }); 
