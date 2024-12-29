@@ -76,10 +76,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Initialize content containers
     const contentDiv = document.getElementById('content');
     contentDiv.innerHTML = `
-        <div id="intro-content">
+        <div id="intro-content" class="intro-embed" style="display: none;">
             <iframe id="intro-iframe" 
-                src="./Assets/HTML/home.html" 
-                style="width: 100%; border: none;"
+                src="./Assets/HTML/home.html"
                 onload="this.style.height = this.contentWindow.document.documentElement.scrollHeight + 'px'"
                 allow="same-origin">
             </iframe>
