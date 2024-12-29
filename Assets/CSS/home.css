@@ -179,12 +179,14 @@ body {
     align-items: flex-start;
     max-height: 0;
     opacity: 0;
+    visibility: hidden;
     transition: all 0.2s ease;
 }
 
 .game-item:hover .game-content {
-    max-height: 500px;
+    max-height: 72px;
     opacity: 1;
+    visibility: visible;
 }
 
 .game-thumbnail {
@@ -263,9 +265,11 @@ body {
 .member-image {
     position: relative;
     width: 128px;
+    max-width: 20vw;
     height: 128px;
+    max-height: 20vw;
     border-radius: 50%;
-    border: 8px solid rgba(236, 233, 233, 0.5);
+    border: min(1.25vw, 8px) solid rgba(236, 233, 233, 0.5);
     overflow: hidden;
     transition: box-shadow 0.2s ease;
 }
@@ -292,7 +296,7 @@ body {
     left: 50%;
     transform: translate(-50%, -50%);
     color: var(--sig-white);
-    font-size: 48px;
+    font-size: min(7.5vw, 48px);
     transition: opacity 0.2s ease;
     z-index: 2;
 }
