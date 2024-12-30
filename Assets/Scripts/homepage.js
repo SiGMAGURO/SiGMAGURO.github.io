@@ -1,13 +1,24 @@
 class HomePage {
     constructor() {
         this.gameListContainer = document.querySelector('.game-list');
-        this.currentLang = window.parent.document.documentElement.getAttribute('data-lang') || 'en';
-        this.init();
-        this.updateAboutContent(this.currentLang);
+        this.currentLang = 'en'; // Default language
         
         window.addEventListener('message', (event) => {
-            if (event.data.type === 'languageChange') {
-                this.currentLang = event.data.lang;
+            try {
+                if (event.data.type === 'init') {
+                    this.currentLang = event.data.lang;
+                    this.init();
+                    this.updateAboutContent(this.currentLang);
+                } else if (event.data.type === 'languageChange') {
+                    this.currentLang = event.data.lang;
+                    this.init();
+                    this.updateAboutContent(this.currentLang);
+                }
+            } catch (error) {
+                console.warn('Message handling error:', error);
+                // Use browser language as fallback
+                this.currentLang = navigator.language.startsWith('zh') ? 'zh' :
+                                 navigator.language.startsWith('ja') ? 'ja' : 'en';
                 this.init();
                 this.updateAboutContent(this.currentLang);
             }

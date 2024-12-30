@@ -58,36 +58,124 @@ document.addEventListener('DOMContentLoaded', async () => {
         return 'en';
     }
 
-    function getCookie(name) {
-        const value = `; ${document.cookie}`;
-        const parts = value.split(`; ${name}=`);
-        if (parts.length === 2) return parts.pop().split(';').shift();
-    }
-
-    function setCookie(name, value, days = 365) {
-        const date = new Date();
-        date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
-        const expires = `expires=${date.toUTCString()}`;
-        document.cookie = `${name}=${value};${expires};path=/`;
-    }
-
-    function setLanguage(lang) {
-        document.documentElement.setAttribute('data-lang', lang);
-        setCookie('userLang', lang);
-        
-        // Notify iframe about language change
-        const iframe = document.getElementById('intro-iframe');
-        if (iframe) {
-            iframe.contentWindow.postMessage({ type: 'languageChange', lang: lang }, '*');
-            // Reload iframe to ensure content is updated
-            iframe.src = iframe.src;
+    function isPrivateMode() {
+        try {
+            localStorage.setItem('test', 'test');
+            localStorage.removeItem('test');
+            return false;
+        } catch (e) {
+            return true;
         }
     }
 
-    // Initialize language
-    const savedLang = getCookie('userLang');
-    const currentLang = savedLang || getDefaultLanguage();
+    function getCookie(name) {
+        try {
+            const value = `; ${document.cookie}`;
+            const parts = value.split(`; ${name}=`);
+            if (parts.length === 2) return parts.pop().split(';').shift();
+            return null;
+        } catch (error) {
+            console.warn('Cookie access denied:', error);
+            return null;
+        }
+    }
+
+    function setCookie(name, value, days = 365) {
+        try {
+            const date = new Date();
+            date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+            const expires = `expires=${date.toUTCString()}`;
+            document.cookie = `${name}=${value};${expires};path=/`;
+            return true;
+        } catch (error) {
+            console.warn('Cookie setting failed:', error);
+            return false;
+        }
+    }
+
+    function setLanguage(lang) {
+        try {
+            document.documentElement.setAttribute('data-lang', lang);
+            if (!isPrivateMode()) {
+                setCookie('userLang', lang);
+            }
+        } catch (error) {
+            console.warn('Language setting failed:', error);
+        }
+    }
+
+    // Content initialization
+    function initializeContent() {
+        const contentDiv = document.getElementById('content');
+        const currentLang = document.documentElement.getAttribute('data-lang');
+        
+        contentDiv.innerHTML = `
+            <div id="intro-content">
+                <iframe id="intro-iframe" 
+                    src="./Assets/HTML/home.html" 
+                    style="width: 100%; border: none; overflow: hidden;"
+                    scrolling="no"
+                    onload="this.contentWindow.postMessage({ type: 'init', lang: '${currentLang}' }, '*')">
+                </iframe>
+            </div>
+            <div id="twitter-content" class="twitter-embed" style="display: none;">
+                <a class="twitter-timeline" 
+                href="https://twitter.com/SiGMAGURO?ref_src=twsrc%5Etfw"
+                data-chrome="nofooter noborders transparent"
+                data-tweet-limit="10"
+                data-conversation="none"
+                data-link-color="#5fc3e5"
+                data-media-preview="true"
+                ></a>
+            </div>
+            <div id="cien-content" class="cien-embed" style="display: none;">
+                <iframe 
+                    src="https://ci-en.dlsite.com/creator/18092/article?mode=detail"
+                    allowfullscreen>
+                </iframe>
+            </div>
+            <div id="facebook-content" class="facebook-embed" style="display: none;">
+                <div class="iframe-container">
+                    <iframe 
+                        src="https://www.facebook.com/plugins/page.php?href=https%3A%2F%2Fwww.facebook.com%2Fprofile.php%3Fid%3D61558566783982&tabs=timeline&width=500&height=800&small_header=true&adapt_container_width=true&hide_cover=false&show_facepile=false"
+                        scrolling="no"
+                        frameborder="0"
+                        allowfullscreen="true"
+                        allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share">
+                    </iframe>
+                </div>
+            </div>
+            <div id="youtube-content" class="youtube-embed" style="display: none;">
+                <div class="videos-container">
+                    <div class="video-wrapper">
+                        <iframe 
+                            src="https://www.youtube.com/embed?listType=playlist&list=PLgdRPeSGM0EDf81XOd2o1FrWq2PKHsUQg"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                            allowfullscreen>
+                        </iframe>
+                    </div>
+                    <div class="video-wrapper">
+                        <iframe 
+                            src="https://www.youtube.com/embed?listType=playlist&list=PLgdRPeSGM0EB2yhW5h943osWg3lj9zk3C"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                            allowfullscreen>
+                        </iframe>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        // Call setup after content initialization
+        setupIframeResize();
+        showContent('intro-content');
+    }
+
+    // Initialize language first
+    const currentLang = isPrivateMode() ? getDefaultLanguage() : (getCookie('userLang') || getDefaultLanguage());
     document.documentElement.setAttribute('data-lang', currentLang);
+
+    // Initialize content immediately after language is set
+    initializeContent();
 
     // Handle language selection
     document.querySelectorAll('.lang-option').forEach(option => {
@@ -97,6 +185,13 @@ document.addEventListener('DOMContentLoaded', async () => {
             
             if (newLang && newLang !== currentLang) {
                 setLanguage(newLang);
+                const iframe = document.getElementById('intro-iframe');
+                if (iframe) {
+                    iframe.contentWindow.postMessage({ 
+                        type: 'languageChange', 
+                        lang: newLang 
+                    }, '*');
+                }
             }
             closeMenu();
         });
@@ -159,68 +254,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             }
         });
     }
-
-    // Initialize content
-    const contentDiv = document.getElementById('content');
-    contentDiv.innerHTML = `
-        <div id="intro-content">
-            <iframe id="intro-iframe" 
-                src="./Assets/HTML/home.html" 
-                style="width: 100%; border: none; overflow: hidden;"
-                scrolling="no">
-            </iframe>
-        </div>
-        <div id="twitter-content" class="twitter-embed" style="display: none;">
-            <a class="twitter-timeline" 
-            href="https://twitter.com/SiGMAGURO?ref_src=twsrc%5Etfw"
-            data-chrome="nofooter noborders transparent"
-            data-tweet-limit="10"
-            data-conversation="none"
-            data-link-color="#5fc3e5"
-            data-media-preview="true"
-            data-theme="light"
-            data-dnt="true">
-            </a>
-        </div>
-        <div id="cien-content" class="cien-embed" style="display: none;">
-            <iframe 
-                src="https://ci-en.dlsite.com/creator/18092/article?mode=detail"
-                allowfullscreen>
-            </iframe>
-        </div>
-        <div id="facebook-content" class="facebook-embed" style="display: none;">
-            <div class="iframe-container">
-                <iframe 
-                    src="https://www.facebook.com/plugins/page.php?href=https%3A%2F%2Fwww.facebook.com%2Fprofile.php%3Fid%3D61558566783982&tabs=timeline&width=500&height=800&small_header=true&adapt_container_width=true&hide_cover=false&show_facepile=false"
-                    scrolling="no"
-                    frameborder="0"
-                    allowfullscreen="true"
-                    allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share">
-                </iframe>
-            </div>
-        </div>
-        <div id="youtube-content" class="youtube-embed" style="display: none;">
-            <div class="videos-container">
-                <div class="video-wrapper">
-                    <iframe 
-                        src="https://www.youtube.com/embed?listType=playlist&list=PLgdRPeSGM0EDf81XOd2o1FrWq2PKHsUQg"
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                        allowfullscreen>
-                    </iframe>
-                </div>
-                <div class="video-wrapper">
-                    <iframe 
-                        src="https://www.youtube.com/embed?listType=playlist&list=PLgdRPeSGM0EB2yhW5h943osWg3lj9zk3C"
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                        allowfullscreen>
-                    </iframe>
-                </div>
-            </div>
-        </div>
-    `;
-
-    // Call setup after content initialization
-    setupIframeResize();
 
     // Load Twitter widget
     await loadTwitterWidget();
@@ -617,12 +650,22 @@ document.addEventListener('DOMContentLoaded', async () => {
         showContent('youtube-content');
     });
 
-    // Add this message listener after DOMContentLoaded
+    // Add message listener for iframe communication
     window.addEventListener('message', function(e) {
         if (e.data && e.data.type === 'resize') {
             const iframe = document.getElementById('intro-iframe');
             if (iframe) {
                 iframe.style.height = `${e.data.height}px`;
+            }
+        } else if (e.data && e.data.type === 'ready') {
+            // Send current language to iframe when it's ready
+            const iframe = document.getElementById('intro-iframe');
+            if (iframe) {
+                const currentLang = document.documentElement.getAttribute('data-lang') || 'en';
+                iframe.contentWindow.postMessage({ 
+                    type: 'languageChange', 
+                    lang: currentLang 
+                }, '*');
             }
         }
     });
