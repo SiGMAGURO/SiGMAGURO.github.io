@@ -151,7 +151,7 @@ body {
     margin-bottom: 8px;
     padding: 16px;
     box-sizing: border-box;
-    transition: all 0.3s ease;
+    transition: all 0.2s ease;
     overflow: hidden;
 }
 
@@ -164,7 +164,7 @@ body {
 
 .game-name {
     color: var(--sig-blue-dark);
-    font-size: 2vw;
+    font-size: 3vw;
     font-weight: bold;
 }
 
@@ -235,6 +235,7 @@ body {
 }
 
 .copyright p{
+    margin-top: 96pt;
     color: var(--sig-blue-mid);
     font-size: 12pt;
     text-align: center;
@@ -315,4 +316,22 @@ body {
 .member-image:hover .member-overlay,
 .member-image:hover .member-icon {
     opacity: 0;
+}
+
+.about {
+    text-align: center;
+}
+
+.about-content {
+    display: none;
+}
+
+.about-content.active {
+    display: block;
+}
+
+.about-content p {
+    line-height: 1.5em;
+    margin-left: 2vw;
+    margin-right: 2vw;
 }

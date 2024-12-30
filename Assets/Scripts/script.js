@@ -50,9 +50,55 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     });
 
+    // Language handling functions
+    function getDefaultLanguage() {
+        const browserLang = navigator.language.toLowerCase();
+        if (browserLang.startsWith('zh')) return 'zh';
+        if (browserLang.startsWith('ja')) return 'ja';
+        return 'en';
+    }
+
+    function getCookie(name) {
+        const value = `; ${document.cookie}`;
+        const parts = value.split(`; ${name}=`);
+        if (parts.length === 2) return parts.pop().split(';').shift();
+    }
+
+    function setCookie(name, value, days = 365) {
+        const date = new Date();
+        date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+        const expires = `expires=${date.toUTCString()}`;
+        document.cookie = `${name}=${value};${expires};path=/`;
+    }
+
+    function setLanguage(lang) {
+        document.documentElement.setAttribute('data-lang', lang);
+        setCookie('userLang', lang);
+        
+        // Notify iframe about language change
+        const iframe = document.getElementById('intro-iframe');
+        if (iframe) {
+            iframe.contentWindow.postMessage({ type: 'languageChange', lang: lang }, '*');
+            // Reload iframe to ensure content is updated
+            iframe.src = iframe.src;
+        }
+    }
+
+    // Initialize language
+    const savedLang = getCookie('userLang');
+    const currentLang = savedLang || getDefaultLanguage();
+    document.documentElement.setAttribute('data-lang', currentLang);
+
+    // Handle language selection
     document.querySelectorAll('.lang-option').forEach(option => {
         option.addEventListener('click', (e) => {
-            handleLanguageSelect(e.target.dataset.lang);
+            const newLang = e.target.dataset.lang;
+            const currentLang = document.documentElement.getAttribute('data-lang');
+            
+            if (newLang && newLang !== currentLang) {
+                setLanguage(newLang);
+            }
+            closeMenu();
         });
     });
 
@@ -126,14 +172,14 @@ document.addEventListener('DOMContentLoaded', async () => {
         </div>
         <div id="twitter-content" class="twitter-embed" style="display: none;">
             <a class="twitter-timeline" 
-               href="https://twitter.com/SiGMAGURO"
-               data-chrome="noheader nofooter noborders transparent"
-               data-tweet-limit="10"
-               data-conversation="none"
-               data-link-color="#5fc3e5"
-               data-media-preview="true"
-               data-theme="light"
-               data-dnt="true">
+            href="https://twitter.com/SiGMAGURO?ref_src=twsrc%5Etfw"
+            data-chrome="nofooter noborders transparent"
+            data-tweet-limit="10"
+            data-conversation="none"
+            data-link-color="#5fc3e5"
+            data-media-preview="true"
+            data-theme="light"
+            data-dnt="true">
             </a>
         </div>
         <div id="cien-content" class="cien-embed" style="display: none;">
@@ -579,5 +625,13 @@ document.addEventListener('DOMContentLoaded', async () => {
                 iframe.style.height = `${e.data.height}px`;
             }
         }
+    });
+
+    //change language when data-lang is changed
+    document.querySelectorAll('[data-lang]').forEach(element => {
+        element.addEventListener('click', () => {
+            const lang = element.getAttribute('data-lang');
+            
+        });
     });
 }); 

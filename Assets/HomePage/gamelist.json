@@ -1,15 +1,23 @@
 {
     "games": [
         {
-            "name": "Ayane: The Pregnancy Planet | 妊星少女綾音 | 妊星少女綾音",
+            "name": {
+                "en": "Ayane: The Pregnancy Planet",
+                "ja": "妊星少女綾音",
+                "zh": "妊星少女綾音"
+            },
             "date": "2025-",
             "thumbnail": "../Textures/Display/12.png",
             "links": {
-                "text": "Coming soon"
+                "text": "In preparation"
             }
         },
         {
-            "name": "Tower of Megami Descent | 女神降臨の昇天塔 | 女神降臨的昇天塔",
+            "name":{
+                "en": "Tower of Megami Descent",
+                "ja": "女神降臨の昇天塔",
+                "zh": "女神降臨的昇天塔"
+            },
             "date": "2024-04-27",
             "thumbnail": "../Textures/Display/03.png",
             "links": {
@@ -22,11 +30,15 @@
             }
         },
         {
-            "name": "Interstellar Otaku | 星間オタク | 星際肥宅",
+            "name": {
+                "en": "Interstellar Otaku",
+                "ja": "星間オタク",
+                "zh": "星際肥宅"
+            },
             "date": "Undetermined",
             "thumbnail": "../Textures/Display/01.png",
             "links": {
-                "text": "Coming soon"
+                "text": "In preparation"
             }
         }
     ]

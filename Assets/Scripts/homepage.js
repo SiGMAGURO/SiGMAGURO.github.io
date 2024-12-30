@@ -1,6 +1,6 @@
-class GameList {
+class HomePage {
     constructor() {
-        this.container = document.querySelector('.game-list');
+        this.gameListContainer = document.querySelector('.game-list');
         this.currentLang = window.parent.document.documentElement.getAttribute('data-lang') || 'en';
         this.init();
         this.updateAboutContent(this.currentLang);
@@ -15,12 +15,10 @@ class GameList {
     }
 
     updateAboutContent(lang) {
-        // Hide all about content
         document.querySelectorAll('.about-content').forEach(content => {
             content.classList.remove('active');
         });
 
-        // Show content for current language
         const currentContent = document.querySelector(`.about-content[data-lang="${lang}"]`);
         if (currentContent) {
             currentContent.classList.add('active');
@@ -38,7 +36,7 @@ class GameList {
     }
 
     renderGames(games) {
-        this.container.innerHTML = ''; // Clear existing content
+        this.gameListContainer.innerHTML = '';
         games.forEach(game => {
             const gameElement = document.createElement('div');
             gameElement.className = 'game-item';
@@ -58,7 +56,7 @@ class GameList {
                 </div>
             `;
             
-            this.container.appendChild(gameElement);
+            this.gameListContainer.appendChild(gameElement);
         });
     }
 
@@ -92,7 +90,6 @@ class GameList {
     }
 }
 
-// Initialize when DOM is ready
 document.addEventListener('DOMContentLoaded', () => {
-    window.gameList = new GameList();
+    window.homePage = new HomePage();
 }); 
