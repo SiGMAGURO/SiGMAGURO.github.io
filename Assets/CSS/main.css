@@ -208,7 +208,6 @@ main {
 .lang-btn {
     background: none;
     border: none;
-    font-size: 24px;
     cursor: pointer;
     color: var(--sig-blue-dark);
     padding: 8px;
@@ -227,7 +226,7 @@ main {
     border-radius: 0 0 4px 4px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
     overflow: hidden;
-    min-width: 120px;
+    min-width: 128px;
     transform-origin: top center;
     transform: scaleY(0);
     opacity: 0;
@@ -244,6 +243,7 @@ main {
 .lang-option {
     padding: 8px 16px;
     cursor: pointer;
+    font-size: 24px;
     color: var(--sig-blue-dark);
     transition: 
         color 0.2s ease,
