@@ -9,7 +9,7 @@
             "date": "2025-",
             "thumbnail": "../Textures/Display/12.png",
             "links": {
-                "text": "In preparation"
+                "text": "Preparing"
             }
         },
         {
@@ -35,10 +35,10 @@
                 "ja": "星間オタク",
                 "zh": "星際肥宅"
             },
-            "date": "Undetermined",
+            "date": "-",
             "thumbnail": "../Textures/Display/01.png",
             "links": {
-                "text": "In preparation"
+                "text": "Preparing"
             }
         }
     ]

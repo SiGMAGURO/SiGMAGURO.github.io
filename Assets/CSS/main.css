@@ -226,10 +226,11 @@ main {
     border-radius: 0 0 4px 4px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
     overflow: hidden;
-    min-width: 128px;
+    min-width: 96px;
     transform-origin: top center;
     transform: scaleY(0);
     opacity: 0;
+    visibility: hidden;
     transition: 
         transform 0.2s ease,
         opacity 0.2s ease;
@@ -238,12 +239,13 @@ main {
 .lang-menu.show {
     transform: scaleY(1);
     opacity: 1;
+    visibility: visible;
 }
 
 .lang-option {
     padding: 8px 16px;
     cursor: pointer;
-    font-size: 24px;
+    font-size: 16px;
     color: var(--sig-blue-dark);
     transition: 
         color 0.2s ease,

@@ -49,6 +49,8 @@ class HomePage {
     renderGames(games) {
         this.gameListContainer.innerHTML = '';
         games.forEach(game => {
+            console.log('Current game:', game); // 檢查每個遊戲物件
+            console.log('Date value:', game.date); // 檢查日期值
             const gameElement = document.createElement('div');
             gameElement.className = 'game-item';
             
@@ -72,10 +74,10 @@ class HomePage {
     }
 
     createLinksHtml(links) {
-        if (!links || links.text === "In preparation") {
+        if (!links || links.text === "Preparing") {
             const text = this.currentLang === 'zh' ? '準備中' :
-                        this.currentLang === 'ja' ? '準備中' : 'In preparation';
-            return `<span class="coming-soon">${text}</span>`;
+                        this.currentLang === 'ja' ? '準備中' : 'Preparing';
+            return `<span class="show-link">${text}</span>`;
         }
 
         try {
@@ -84,7 +86,7 @@ class HomePage {
             
             if (linkTexts.length !== hrefs.length) {
                 console.warn(`Links mismatch for text: ${links.text}`);
-                return '<span class="coming-soon">Links unavailable</span>';
+                return '<span class="show-link">Links unavailable</span>';
             }
 
             return linkTexts
@@ -93,10 +95,10 @@ class HomePage {
                     if (!href) return text;
                     return `<a href="${href}" target="_blank" rel="noopener noreferrer">${text}</a>`;
                 })
-                .join('');
+                .join('\n');
         } catch (error) {
             console.error('Error creating links:', error);
-            return '<span class="coming-soon">Error loading links</span>';
+            return '<span class="show-link">Error loading links</span>';
         }
     }
 }
