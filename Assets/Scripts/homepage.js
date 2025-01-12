@@ -49,8 +49,8 @@ class HomePage {
     renderGames(games) {
         this.gameListContainer.innerHTML = '';
         games.forEach(game => {
-            console.log('Current game:', game); // 檢查每個遊戲物件
-            console.log('Date value:', game.date); // 檢查日期值
+            console.log('Current game:', game); // check each game object
+            console.log('Date value:', game.date); // check date value
             const gameElement = document.createElement('div');
             gameElement.className = 'game-item';
             
