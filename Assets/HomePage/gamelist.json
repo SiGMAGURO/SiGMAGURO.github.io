@@ -9,7 +9,10 @@
             "date": "2025-",
             "thumbnail": "../Textures/Display/12.png",
             "links": {
-                "text": "Preparing"
+                "text": "DLsite",
+                "hrefs":[
+                    "https://www.dlsite.com/maniax/announce/=/product_id/RJ01320391.html"
+                ]
             }
         },
         {
