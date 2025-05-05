@@ -17,6 +17,21 @@
         },
         {
             "name":{
+                "en": "Tower of Megami Descent: Healthy",
+                "ja": "女神降臨の昇天塔：健全版",
+                "zh": "女神降臨的昇天塔：健康版"
+            },
+            "date": "2024-05-06",
+            "thumbnail": "../Textures/Display/03.png",
+            "links": {
+                "text": "SiGMAGURO",
+                "hrefs": [
+                    "https://sigmaguro.com/ToMDH"
+                ]
+            }
+        },
+        {
+            "name":{
                 "en": "Tower of Megami Descent",
                 "ja": "女神降臨の昇天塔",
                 "zh": "女神降臨的昇天塔"
