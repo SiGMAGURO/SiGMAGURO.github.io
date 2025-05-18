@@ -41,6 +41,7 @@ class ImageDisplay {
         this.container.innerHTML = '';
         this.images.forEach((src, index) => {
             const img = document.createElement('img');
+            img.loading = 'lazy';
             // modify path to fit iframe environment
             img.src = `../Textures/Display/${src}`;
             img.classList.add('display-image');
