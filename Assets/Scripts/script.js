@@ -200,8 +200,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Content switching handlers
     const contentHandlers = {
         'home_link': showContent.bind(null, 'intro-content'),
-        'twitter_link': showContent.bind(null, 'twitter-content'),
-        'ci-en_link': showContent.bind(null, 'cien-content'),
+        'twitter_link': () => window.open('https://x.com/SiGMAGURO', '_blank'),
+        'ci-en_link': () => window.open('https://ci-en.dlsite.com/creator/18092', '_blank'),
         'facebook_link': showContent.bind(null, 'facebook-content'),
         'youtube_link': showContent.bind(null, 'youtube-content')
     };
@@ -622,32 +622,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         
         // Toggle hidden state
         this.setAttribute('data-hidden', !isHidden);
-    });
-
-    // Add click handlers for menu items
-    document.getElementById('home_link').addEventListener('click', (e) => {
-        e.preventDefault();
-        showContent('intro-content');
-    });
-
-    document.getElementById('twitter_link').addEventListener('click', (e) => {
-        e.preventDefault();
-        showContent('twitter-content');
-    });
-
-    document.getElementById('ci-en_link').addEventListener('click', (e) => {
-        e.preventDefault();
-        showContent('cien-content');
-    });
-
-    document.getElementById('facebook_link').addEventListener('click', (e) => {
-        e.preventDefault();
-        showContent('facebook-content');
-    });
-
-    document.getElementById('youtube_link').addEventListener('click', (e) => {
-        e.preventDefault();
-        showContent('youtube-content');
     });
 
     // Add message listener for iframe communication
